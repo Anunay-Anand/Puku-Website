@@ -2,241 +2,421 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>For My Puku 💖</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap"
         rel="stylesheet">
     <style>
+        :root {
+            --pink: #ff4e91;
+            --soft: #ffeef6;
+            --card: rgba(255, 255, 255, 0.88);
+        }
+
+        html,
         body {
+            height: 100%;
             margin: 0;
+            background: linear-gradient(135deg, #ffedf3, #fff6e8);
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #ffdee9, #b5fffc);
             overflow-x: hidden;
         }
 
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px;
+        }
+
+        /* Intro */
+        .intro {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            animation: fadeIn .6s ease;
+        }
+
         h1,
-        h2,
-        h3 {
+        h2 {
             font-family: 'Pacifico', cursive;
-            text-align: center;
-            color: #ff4e91;
+            color: var(--pink);
+            margin: .2rem 0;
+            text-align: center
         }
 
-        .menu,
-        .quiz,
-        .sequence-game,
-        .final-screen {
+        h1 {
+            font-size: 2.8rem
+        }
+
+        .message {
+            max-width: 720px;
+            background: var(--card);
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            font-size: 1.05rem;
+            color: #4b2e2e;
+            transition: transform .25s
+        }
+
+        .message:hover {
+            transform: scale(1.02)
+        }
+
+        .main-pic {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(255, 78, 145, 0.12);
+            border: 6px solid rgba(255, 78, 145, 0.12);
+            transition: transform .4s
+        }
+
+        .main-pic:hover {
+            transform: scale(1.02) rotate(-2deg)
+        }
+
+        /* Menu */
+        .menu-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            margin-top: 18px
+        }
+
+        .btn {
+            background: var(--pink);
+            color: #fff;
+            border: none;
+            padding: 14px 26px;
+            border-radius: 28px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(255, 78, 145, 0.12);
+            transition: transform .14s, background .14s
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            background: #ff6fa8
+        }
+
+        /* games */
+        .panel {
             display: none;
-            padding: 20px;
-            animation: fadeIn 1s ease forwards;
+            margin-top: 22px;
+            animation: fadeIn .5s ease
         }
 
-        .active {
+        .panel.active {
+            display: block
+        }
+
+        .card {
+            background: var(--card);
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06)
+        }
+
+        .quiz-question {
+            max-width: 640px;
+            margin: 12px auto;
+            text-align: center
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px
+        }
+
+        .option {
+            padding: 10px 12px;
+            border-radius: 14px;
+            border: 2px solid rgba(255, 78, 145, 0.12);
+            cursor: pointer;
+            transition: background .12s, transform .12s
+        }
+
+        .option:hover {
+            background: #ffe4f2;
+            transform: scale(1.02)
+        }
+
+        .score-pill {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #fff, #ffe9f5);
+            border: 1px solid rgba(255, 78, 145, 0.12);
+            color: var(--pink);
+            font-weight: 600
+        }
+
+        /* sequence styles */
+        .image-pool,
+        .sequence-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 12px;
+            border-radius: 12px;
+            min-height: 140px
+        }
+
+        .image-pool {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 240, 245, 0.7));
+        }
+
+        .sequence-area {
+            background: transparent;
+            border: 2px dashed rgba(255, 78, 145, 0.14);
+            min-height: 160px;
+            padding: 14px
+        }
+
+        .tile {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: grab;
+            border: 4px solid white;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12)
+        }
+
+        .hint {
+            color: #7b4e6b;
+            font-size: 0.95rem
+        }
+
+        /* overlay & spinner */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .overlay-card {
+            background: linear-gradient(180deg, #fff, #fff7fb);
+            padding: 28px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
+            max-width: 640px
+        }
+
+        .spinner {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 12px solid #ffeef8;
+            border-top-color: var(--pink);
+            margin: 18px auto;
+            animation: spin 1.6s ease-out
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0)
+            }
+
+            to {
+                transform: rotate(1080deg)
+            }
+        }
+
+        /* final unlock */
+        .final {
+            display: none;
+            padding: 36px;
+            border-radius: 16px;
+            text-align: center;
+            background: linear-gradient(180deg, #fff7f9, #fff0f4);
+            box-shadow: 0 12px 40px rgba(255, 78, 145, 0.06)
+        }
+
+        .final.show {
             display: block;
+            animation: pop .5s ease
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(.92);
+                opacity: 0
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        /* hearts & sparkles */
+        .party {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden
+        }
+
+        .party .heart {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: var(--pink);
+            transform: rotate(45deg);
+            opacity: .9
+        }
+
+        .party .heart:before,
+        .party .heart:after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: var(--pink);
+            border-radius: 50%
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: gold;
+            border-radius: 50%;
+            opacity: .95
+        }
+
+        /* responsive */
+        @media (max-width:720px) {
+            .main-pic {
+                width: 160px;
+                height: 160px
+            }
+
+            .tile {
+                width: 100px;
+                height: 100px
+            }
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
+                transform: translateY(6px)
             }
 
             to {
                 opacity: 1;
-            }
-        }
-
-        .btn {
-            display: block;
-            margin: 20px auto;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border: none;
-            border-radius: 25px;
-            background: #ff4e91;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        .btn:hover {
-            background: #ff6fa8;
-            transform: scale(1.05);
-        }
-
-        .quiz-question {
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 20px;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .quiz-option {
-            margin: 10px;
-            padding: 10px 15px;
-            border: 2px solid #ff4e91;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .quiz-option:hover {
-            background: #ff4e91;
-            color: white;
-        }
-
-        .image-pool,
-        .sequence-area {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            min-height: 150px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 20px;
-        }
-
-        .image-pool img,
-        .sequence-area img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 15px;
-            cursor: grab;
-            border: 3px solid white;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            color: #ff4e91;
-            z-index: 1000;
-            display: none;
-        }
-
-        .spinner {
-            margin: 20px auto;
-            width: 200px;
-            height: 200px;
-            border: 10px solid #eee;
-            border-top: 10px solid #ff4e91;
-            border-radius: 50%;
-            animation: spin 3s ease-out forwards;
-        }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0);
-            }
-
-            to {
-                transform: rotate(1080deg);
-            }
-        }
-
-        .hearts {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .heart {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: pink;
-            transform: rotate(45deg);
-            animation: float 6s infinite ease-in;
-        }
-
-        .heart:before,
-        .heart:after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: pink;
-            border-radius: 50%;
-        }
-
-        .heart:before {
-            top: -10px;
-            left: 0;
-        }
-
-        .heart:after {
-            left: -10px;
-            top: 0;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(45deg);
-            }
-
-            100% {
-                transform: translateY(-800px) rotate(45deg);
+                transform: none
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="container">
+        <!-- INTRO -->
+        <section class="intro" id="introSection" style="text-align: center;">
+            <h1>I Love You, Samiksha chan ❤️</h1>
+            <img id="mainPic" class="main-pic" src="/images/shadesOfPuku/20250607_155137.jpg" alt="Puku - main">
+            <div class="message card" style="margin: 0 auto;">
+                <p>You're the most beautiful part of my life — my calm, my laughter, my favourite thought. I love you to
+                    the moon and back, Puksuuu. Forever yours,<br><strong>Puku Baby</strong></p>
+            </div>
+        </section>
 
-    <div class="menu active">
-        <h1>For My Puku 💖</h1>
-        <button class="btn" onclick="startQuiz()">💖 Play the Quiz</button>
-        <button class="btn" onclick="startSequence()">🧩 Play the Sequence Game</button>
+        <!-- MENU -->
+        <section class="menu-box card" id="menuBox" style="margin-top:18px;">
+            <h2 style="margin:6px 0 0 0">Ready, Puku?</h2>
+            <div style="display:flex;gap:14px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+                <button class="btn" onclick="startQuiz()">💖 Play the Quiz</button>
+                <button class="btn" onclick="startSequence()">🧩 Play the Sequence Game</button>
+            </div>
+            <div style="margin-top:10px"><span class="hint">Each game has its own score. Win both to unlock a special
+                    surprise ✨</span></div>
+        </section>
+
+        <!-- QUIZ PANEL -->
+        <section id="quizPanel" class="panel card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <h2>Puku Quiz</h2>
+                <div><span class="score-pill">Quiz Score: <span id="quizScore">0</span></span></div>
+            </div>
+            <div id="quizArea" class="quiz-question"></div>
+            <div style="display:flex;gap:12px;justify-content:center;margin-top:12px;">
+                <button class="btn" onclick="backToMenuFromQuiz()">🏠 Back</button>
+            </div>
+        </section>
+
+        <!-- SEQUENCE PANEL -->
+        <section id="sequencePanel" class="panel card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <h2>Arrange Pictures</h2>
+                <div><span class="score-pill">Sequence Score: <span id="seqScore">0</span></span></div>
+            </div>
+
+            <p class="hint">Drag images from pool into the sequence area. Right-click placed images to remove.</p>
+            <div id="imagePool" class="image-pool card"></div>
+            <div style="height:14px"></div>
+            <div id="sequenceArea" class="sequence-area"></div>
+
+            <div style="display:flex;gap:12px;justify-content:center;margin-top:14px;">
+                <button class="btn" onclick="checkSequence()">✅ Check Sequence</button>
+                <button class="btn" onclick="backToMenuFromSeq()">🏠 Back</button>
+            </div>
+            <p id="sequenceMessage" style="text-align:center;margin-top:10px;color:#7b4e6b"></p>
+        </section>
+
+        <!-- Final unlock -->
+        <section id="finalPanel" class="final">
+            <h1>🎉 You’ve unlocked all my love today, baby girl ❤️</h1>
+            <p style="margin-top:8px;color:#6a3560">You did it. All my silly rewards and all my heart — today is yours.
+            </p>
+            <div style="margin-top:18px;text-align:center">
+                <button class="btn" onclick="goHome()">Back to Home</button>
+            </div>
+        </section>
     </div>
 
-    <div class="quiz">
-        <h2>Puku Quiz 💕</h2>
-        <div id="quiz-container"></div>
-        <button class="btn" onclick="goMenu()">🏠 Back to Menu</button>
+    <!-- overlay for reward -->
+    <div id="overlay" class="overlay">
+        <div class="overlay-card">
+            <div id="overlayText" style="font-family:'Pacifico',cursive;font-size:1.15rem;color:var(--pink)">Whatever
+                Puku says... she is always right 💖 You Win!!</div>
+            <div id="spinBox" class="spinner"></div>
+            <div id="rewardText" style="margin-top:12px;font-size:1.05rem;color:#6a3560"></div>
+            <div style="margin-top:14px"><button class="btn" onclick="closeOverlay()">OK</button></div>
+        </div>
     </div>
 
-    <div class="sequence-game">
-        <h2>Arrange Pictures in Right Sequence 🧩</h2>
-        <h3>Drag images from pool to arrange them in correct order</h3>
-        <div class="image-pool" id="image-pool"></div>
-        <div class="sequence-area" id="sequence-area"></div>
-        <button class="btn" onclick="checkSequence()">✅ Check Sequence</button>
-        <button class="btn" onclick="goMenu()">🏠 Back to Menu</button>
-    </div>
-
-    <div class="final-screen">
-        <h1>You’ve unlocked all my love today, baby girl ❤️</h1>
-    </div>
-
-    <div class="overlay" id="overlay">
-        <p id="overlay-text"></p>
-        <div class="spinner" id="spinner"></div>
-        <p id="reward-text"></p>
-        <button class="btn" onclick="closeOverlay()">OK</button>
-    </div>
-
-    <div class="hearts" id="hearts"></div>
+    <!-- hearts/sparkles -->
+    <div id="party" class="party"></div>
 
     <script>
+        // --------- Config ----------
         const quizData = [
             { question: "who is my favoraite?", answers: ["Puku Baby", "Samiksha chan", "Nuvika", "Puchku"] },
             { question: "When is our anniversary?", answers: ["Oct 2nd", "Aug 15th", "July 20th", "Oct 11th"] },
@@ -244,18 +424,19 @@
             { question: "Who loves more in both of us?", answers: ["Puku Baby", "Puku Babyyy"] }
         ];
         const rewards = [
-            "🍰 Cheese cake of your choice!!",
-            "🎤 I love you puku record a song and send",
-            "💃 Dance on Puku baby tunes and show her your moves",
-            "😂 Send funny pics to make puku laugh",
+            "🍰 Cheesecake of your choice!!",
+            "🎤 Record an 'I love you Puku' song and send it",
+            "💃 Dance to Puku's tunes and show your moves",
+            "😂 Send funny pics to make Puku laugh",
             "🍳 Cook for Puku when you're at her place",
             "🙏 Say sorry for whatever happens in the next one hour",
             "🎬 Take her on a movie date next week",
             "🌄 Take her on some fun adventure",
-            "❤️ Say you lover her and cuddle up baby girl",
-            "🔥 Make her moan your name until she marks her territory on you"
+            "❤️ Tell her you love her and cuddle up, baby girl",
+            "🔥 Make her melt with your name (wink)"
         ];
-        const images = [
+        // keep images in folder as requested (relative paths)
+         const images = [
             "images/SequenceGame/IMG_20241002_232345.jpg",
             "images/SequenceGame/8BD87B74-8BDE-4CF2-9FBF-1171A2ED51A5.jpeg",
             "images/SequenceGame/IMG-20241220-WA0139.jpg",
@@ -267,135 +448,287 @@
             "images/SequenceGame/Snapchat-576221581.jpg"
         ];
 
-        let quizIndex = 0, quizScore = 0;
-        let seqCorrectOrder = [...images];
-        let seqArranged = [];
-        let quizWon = false, seqWon = false;
+        // --------- state ----------
+        let quizIndex = 0, quizScore = 0, quizWon = false;
+        let seqCorrect = [...images]; // correct order
+        let seqPlaced = []; // full src strings
+        let seqScore = 0, seqWon = false;
+        let wonQuizOnce = false, wonSeqOnce = false; // track wins this session
 
-        function goMenu() {
-            document.querySelectorAll('.quiz, .sequence-game, .final-screen').forEach(e => e.classList.remove('active'));
-            document.querySelector('.menu').classList.add('active');
+        // UI refs
+        const intro = document.getElementById('introSection');
+        const menuBox = document.getElementById('menuBox');
+        const quizPanel = document.getElementById('quizPanel');
+        const sequencePanel = document.getElementById('sequencePanel');
+        const finalPanel = document.getElementById('finalPanel');
+        const overlay = document.getElementById('overlay');
+        const overlayText = document.getElementById('overlayText');
+        const spinBox = document.getElementById('spinBox');
+        const rewardText = document.getElementById('rewardText');
+        const quizArea = document.getElementById('quizArea');
+        const quizScoreEl = document.getElementById('quizScore');
+        const seqScoreEl = document.getElementById('seqScore');
+        const imagePool = document.getElementById('imagePool');
+        const sequenceArea = document.getElementById('sequenceArea');
+        const sequenceMessage = document.getElementById('sequenceMessage');
+        const party = document.getElementById('party');
+
+        // small UI sound (click/pop) using WebAudio
+        let audioCtx = null;
+        function playClick() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = 'sine'; o.frequency.value = 520;
+            g.gain.value = 0.02;
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // ---------- helpers ----------
+        function fadeOut(el, cb) {
+            el.style.transition = "opacity .28s, transform .28s";
+            el.style.opacity = 0;
+            el.style.transform = "translateY(8px)";
+            setTimeout(() => { if (cb) cb(); el.style.opacity = ''; el.style.transform = ''; }, 280);
+        }
+        function fadeInEl(el) { el.style.opacity = 0; el.style.transform = "translateY(6px)"; setTimeout(() => { el.style.transition = "opacity .28s, transform .28s"; el.style.opacity = 1; el.style.transform = ''; }, 20); }
+
+        // ---------- NAV ----------
+        function hideAllPanels() {
+            quizPanel.classList.remove('active');
+            sequencePanel.classList.remove('active');
+            menuBox.classList.remove('active');
+            finalPanel.classList.remove('show');
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        }
+        function goHome() {
+            hideAllPanels();
+            intro.style.display = 'block';
+            menuBox.classList.add('active');
+            finalPanel.classList.remove('show');
+            sequenceMessage.innerText = '';
+            playClick();
         }
         function startQuiz() {
-            quizIndex = 0; quizScore = 0;
-            document.querySelector('.menu').classList.remove('active');
-            document.querySelector('.quiz').classList.add('active');
-            showQuiz();
+            playClick();
+            // fade intro/menu
+            intro.style.display = 'none';
+            menuBox.classList.remove('active');
+            quizPanel.classList.add('active');
+            quizIndex = 0; quizScore = 0; quizWon = false;
+            quizScoreEl.innerText = quizScore;
+            renderQuiz();
         }
-        function showQuiz() {
-            const q = quizData[quizIndex];
-            let html = `<div class="quiz-question"><h3>${q.question}</h3>`;
-            q.answers.forEach(ans => {
-                html += `<div class="quiz-option" onclick="selectAnswer('${ans}')">${ans}</div>`;
-            });
-            html += `</div>`;
-            document.getElementById('quiz-container').innerHTML = html;
-        }
-        function selectAnswer(ans) {
-            quizScore++;
-            quizIndex++;
-            if (quizIndex < quizData.length) {
-                showQuiz();
-            } else {
-                quizWon = true;
-                showReward();
-            }
+        function backToMenuFromQuiz() {
+            playClick();
+            quizPanel.classList.remove('active');
+            intro.style.display = 'block';
+            menuBox.classList.add('active');
         }
         function startSequence() {
-            seqArranged = [];
-            const pool = document.getElementById('image-pool');
-            pool.innerHTML = '';
-            document.getElementById('sequence-area').innerHTML = '';
-            document.querySelector('.menu').classList.remove('active');
-            document.querySelector('.sequence-game').classList.add('active');
-            [...images].sort(() => Math.random() - 0.5).forEach(src => {
-                const img = document.createElement('img');
-                img.src = src;
-                img.draggable = true;
-                img.addEventListener('dragstart', dragStart);
-                img.addEventListener('contextmenu', e => {
-                    e.preventDefault();
-                    if (seqArranged.includes(src)) {
-                        seqArranged = seqArranged.filter(i => i !== src);
-                        renderSequence();
-                    }
-                });
-                pool.appendChild(img);
-            });
+            playClick();
+            intro.style.display = 'none';
+            menuBox.classList.remove('active');
+            sequencePanel.classList.add('active');
+            seqPlaced = [];
+            sequenceArea.innerHTML = '';
+            sequenceMessage.innerText = '';
+            renderPool();
         }
-        function dragStart(e) {
-            e.dataTransfer.setData("src", e.target.src);
-        }
-        document.getElementById('sequence-area').addEventListener('dragover', e => e.preventDefault());
-        document.getElementById('sequence-area').addEventListener('drop', e => {
-            e.preventDefault();
-            const src = e.dataTransfer.getData("src");
-            if (!seqArranged.includes(src)) {
-                seqArranged.push(src);
-                renderSequence();
-            }
-        });
-        function renderSequence() {
-            const area = document.getElementById('sequence-area');
-            area.innerHTML = '';
-            seqArranged.forEach(src => {
-                const img = document.createElement('img');
-                img.src = src;
-                img.addEventListener('contextmenu', e => {
-                    e.preventDefault();
-                    seqArranged = seqArranged.filter(i => i !== src);
-                    renderSequence();
-                });
-                area.appendChild(img);
-            });
+        function backToMenuFromSeq() {
+            playClick();
+            sequencePanel.classList.remove('active');
+            intro.style.display = 'block';
+            menuBox.classList.add('active');
         }
 
-        function checkSequence() {
-            const arrangedRelative = seqArranged.map(src =>
-                src.replace(window.location.origin, '').replace(/^\//, '')
-            );
-            const correctRelative = seqCorrectOrder.map(src =>
-                src.replace(window.location.origin, '').replace(/^\//, '')
-            );
-
-            if (JSON.stringify(arrangedRelative) === JSON.stringify(correctRelative)) {
-                seqWon = true;
-                showReward();
+        // ---------- QUIZ ----------
+        function renderQuiz() {
+            const q = quizData[quizIndex];
+            let html = `<div class="card"><div class="quiz-question"><h3 style="color:var(--pink)">${q.question}</h3><div class="options">`;
+            q.answers.forEach(ans => {
+                html += `<div class="option" onclick="chooseQuiz('${escapeForJs(ans)}')">${ans}</div>`;
+            });
+            html += `</div></div></div>`;
+            quizArea.innerHTML = html;
+        }
+        function escapeForJs(s) { return s.replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+        function chooseQuiz(ans) {
+            playClick();
+            quizScore++; quizScoreEl.innerText = quizScore;
+            quizIndex++;
+            if (quizIndex < quizData.length) {
+                setTimeout(() => renderQuiz(), 220);
             } else {
-                alert("Try again, baby girl 💕");
+                quizWon = true; wonQuizOnce = true;
+                showReward('quiz');
             }
         }
 
-        function showReward() {
-            document.getElementById('overlay').style.display = 'flex';
-            document.getElementById('overlay-text').innerText = "Whatever Puku says... she is always right 💖 You Win!!";
-            setTimeout(() => {
-                const reward = rewards[Math.floor(Math.random() * rewards.length)];
-                document.getElementById('reward-text').innerText = reward;
-            }, 3000);
-            if (quizWon && seqWon) {
-                setTimeout(showFinal, 5000);
+        // ---------- SEQUENCE POOL ----------
+        function renderPool() {
+            imagePool.innerHTML = '';
+            // randomize display
+            const shuffled = [...images].sort(() => Math.random() - 0.5);
+            shuffled.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = 'tile';
+                img.draggable = true;
+                img.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('text/plain', src);
+                });
+                imagePool.appendChild(img);
+            });
+            // sequence area drag handlers
+            sequenceArea.addEventListener('dragover', e => e.preventDefault());
+            sequenceArea.addEventListener('drop', e => {
+                e.preventDefault();
+                const src = e.dataTransfer.getData('text/plain');
+                if (!seqPlaced.includes(src)) {
+                    seqPlaced.push(src);
+                    renderSequenceArea();
+                }
+            });
+        }
+        function renderSequenceArea() {
+            sequenceArea.innerHTML = '';
+            seqPlaced.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = 'tile';
+                // right click removal (contextmenu)
+                img.addEventListener('contextmenu', e => {
+                    e.preventDefault();
+                    seqPlaced = seqPlaced.filter(s => s !== src);
+                    renderSequenceArea();
+                });
+                sequenceArea.appendChild(img);
+            });
+        }
+        // ---------- CHECK SEQUENCE ----------
+        function checkSequence() {
+            playClick();
+            // compare filenames
+            const placedNames = seqPlaced.map(s => s.split('/').pop());
+            const correctNames = seqCorrect.map(s => s.split('/').pop());
+            if (JSON.stringify(placedNames) === JSON.stringify(correctNames)) {
+                seqScore++; seqScoreEl.innerText = seqScore;
+                seqWon = true; wonSeqOnce = true;
+                showReward('sequence');
+            } else {
+                sequenceMessage.innerText = "Not quite — try again, baby 😘";
+                // small shake animation
+                sequenceArea.animate([{ transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(0)' }], { duration: 420 });
             }
+        }
+
+        // ---------- REWARD + OVERLAY ----------
+        function showReward(source) {
+            // source: 'quiz' or 'sequence'
+            overlay.classList.add('show');
+            overlayText.innerText = "Whatever Puku says... she is always right 💖 You Win!!";
+            rewardText.innerText = "";
+            spinBox.style.display = 'block';
+            // spin animation then show reward text
+            setTimeout(() => {
+                spinBox.style.display = 'none';
+                const r = rewards[Math.floor(Math.random() * rewards.length)];
+                rewardText.innerText = r;
+                // if both won in this session, show final after a pause
+                if (wonQuizOnce && wonSeqOnce) {
+                    setTimeout(() => showFinalUnlock(), 1200);
+                }
+            }, 1300);
+            playClick();
         }
         function closeOverlay() {
-            document.getElementById('overlay').style.display = 'none';
+            overlay.classList.remove('show');
+            rewardText.innerText = '';
+            spinBox.style.display = 'none';
         }
-        function showFinal() {
-            document.querySelectorAll('.menu, .quiz, .sequence-game').forEach(e => e.classList.remove('active'));
-            document.querySelector('.final-screen').classList.add('active');
+
+        // ---------- FINAL UNLOCK ----------
+        function showFinalUnlock() {
+            // show party hearts/sparkles
+            createParty();
+            // show big final message
+            finalPanel.classList.add('show');
+            // hide other panels/menu
+            intro.style.display = 'none';
+            menuBox.classList.remove('active');
+            quizPanel.classList.remove('active');
+            sequencePanel.classList.remove('active');
+            // autoplay small success tone
+            playSuccessTone();
         }
-        function createHearts() {
-            const hearts = document.getElementById('hearts');
-            setInterval(() => {
+
+        // ---------- party visuals ----------
+        function createParty() {
+            party.innerHTML = '';
+            // hearts floating
+            for (let i = 0; i < 28; i++) {
                 const h = document.createElement('div');
-                h.classList.add('heart');
-                h.style.left = Math.random() * 100 + "%";
-                h.style.background = `hsl(${Math.random() * 360},70%,80%)`;
-                hearts.appendChild(h);
-                setTimeout(() => hearts.removeChild(h), 6000);
-            }, 500);
+                h.className = 'heart';
+                const left = Math.random() * 100;
+                const size = 8 + Math.random() * 28;
+                h.style.left = left + '%';
+                h.style.width = size + 'px';
+                h.style.height = size + 'px';
+                h.style.top = (100 + Math.random() * 40) + '%';
+                h.style.background = `hsl(${Math.random() * 360},80%,75%)`;
+                party.appendChild(h);
+                // animate up
+                const dur = 3500 + Math.random() * 2500;
+                h.animate([
+                    { transform: `translateY(0) rotate(45deg)`, opacity: 1 },
+                    { transform: `translateY(-${600 + Math.random() * 300}px) rotate(45deg)`, opacity: 0.1 }
+                ], { duration: dur, iterations: 1, easing: 'cubic-bezier(.2,.8,.2,1)' });
+                setTimeout(() => h.remove(), dur + 120);
+            }
+            // sparkles
+            for (let i = 0; i < 18; i++) {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                s.style.left = Math.random() * 100 + '%';
+                s.style.top = Math.random() * 80 + '%';
+                s.style.background = ['#ffd700', '#fff8c4', '#ffd6e6'][Math.floor(Math.random() * 3)];
+                party.appendChild(s);
+                const d = 800 + Math.random() * 1200;
+                s.animate([{ transform: 'scale(.2)', opacity: 0.2 }, { transform: 'scale(1.1)', opacity: 1 }, { transform: 'scale(0.2)', opacity: 0 }], { duration: d, iterations: 1 });
+                setTimeout(() => s.remove(), d + 100);
+            }
+            // remove after 6s
+            setTimeout(() => party.innerHTML = '', 6500);
         }
-        createHearts();
+
+        // ---------- small success tone ----------
+        function playSuccessTone() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = 'sine'; o.frequency.setValueAtTime(520, audioCtx.currentTime);
+            g.gain.value = 0.02;
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start();
+            o.frequency.exponentialRampToValueAtTime(820, audioCtx.currentTime + 0.25);
+            g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
+            setTimeout(() => o.stop(), 700);
+        }
+
+        // ---------- init ----------
+        (function init() {
+            // show intro + menu initially
+            intro.style.display = 'block';
+            menuBox.classList.add('active');
+            // hide panels
+            quizPanel.classList.remove('active');
+            sequencePanel.classList.remove('active');
+            // set initial text
+            quizScoreEl.innerText = quizScore;
+            seqScoreEl.innerText = seqScore;
+        })();
     </script>
 </body>
 
