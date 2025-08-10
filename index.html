@@ -349,14 +349,23 @@
                 area.appendChild(img);
             });
         }
+
         function checkSequence() {
-            if (JSON.stringify(seqArranged) === JSON.stringify(seqCorrectOrder)) {
+            const arrangedRelative = seqArranged.map(src =>
+                src.replace(window.location.origin, '').replace(/^\//, '')
+            );
+            const correctRelative = seqCorrectOrder.map(src =>
+                src.replace(window.location.origin, '').replace(/^\//, '')
+            );
+
+            if (JSON.stringify(arrangedRelative) === JSON.stringify(correctRelative)) {
                 seqWon = true;
                 showReward();
             } else {
                 alert("Try again, baby girl 💕");
             }
         }
+
         function showReward() {
             document.getElementById('overlay').style.display = 'flex';
             document.getElementById('overlay-text').innerText = "Whatever Puku says... she is always right 💖 You Win!!";
