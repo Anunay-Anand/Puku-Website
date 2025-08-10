@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>For My Puku 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #ffdee9, #b5fffc);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Pacifico', cursive;
+            text-align: center;
+            color: #ff4e91;
+        }
+
+        .menu,
+        .quiz,
+        .sequence-game,
+        .final-screen {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .btn {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 25px;
+            background: #ff4e91;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn:hover {
+            background: #ff6fa8;
+            transform: scale(1.05);
+        }
+
+        .quiz-question {
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-option {
+            margin: 10px;
+            padding: 10px 15px;
+            border: 2px solid #ff4e91;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: #ff4e91;
+            color: white;
+        }
+
+        .image-pool,
+        .sequence-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            min-height: 150px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+        }
+
+        .image-pool img,
+        .sequence-area img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 15px;
+            cursor: grab;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: #ff4e91;
+            z-index: 1000;
+            display: none;
+        }
+
+        .spinner {
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+            border: 10px solid #eee;
+            border-top: 10px solid #ff4e91;
+            border-radius: 50%;
+            animation: spin 3s ease-out forwards;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(1080deg);
+            }
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: pink;
+            transform: rotate(45deg);
+            animation: float 6s infinite ease-in;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: pink;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart:after {
+            left: -10px;
+            top: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(45deg);
+            }
+
+            100% {
+                transform: translateY(-800px) rotate(45deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="menu active">
+        <h1>For My Puku 💖</h1>
+        <button class="btn" onclick="startQuiz()">💖 Play the Quiz</button>
+        <button class="btn" onclick="startSequence()">🧩 Play the Sequence Game</button>
+    </div>
+
+    <div class="quiz">
+        <h2>Puku Quiz 💕</h2>
+        <div id="quiz-container"></div>
+        <button class="btn" onclick="goMenu()">🏠 Back to Menu</button>
+    </div>
+
+    <div class="sequence-game">
+        <h2>Arrange Pictures in Right Sequence 🧩</h2>
+        <h3>Drag images from pool to arrange them in correct order</h3>
+        <div class="image-pool" id="image-pool"></div>
+        <div class="sequence-area" id="sequence-area"></div>
+        <button class="btn" onclick="checkSequence()">✅ Check Sequence</button>
+        <button class="btn" onclick="goMenu()">🏠 Back to Menu</button>
+    </div>
+
+    <div class="final-screen">
+        <h1>You’ve unlocked all my love today, baby girl ❤️</h1>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <p id="overlay-text"></p>
+        <div class="spinner" id="spinner"></div>
+        <p id="reward-text"></p>
+        <button class="btn" onclick="closeOverlay()">OK</button>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+
+    <script>
+        const quizData = [
+            { question: "who is my favoraite?", answers: ["Puku Baby", "Samiksha chan", "Nuvika", "Puchku"] },
+            { question: "When is our anniversary?", answers: ["Oct 2nd", "Aug 15th", "July 20th", "Oct 11th"] },
+            { question: "Puku is the better half of the halves we are?", answers: ["true", "false"] },
+            { question: "Who loves more in both of us?", answers: ["Puku Baby", "Puku Babyyy"] }
+        ];
+        const rewards = [
+            "🍰 Cheese cake of your choice!!",
+            "🎤 I love you puku record a song and send",
+            "💃 Dance on Puku baby tunes and show her your moves",
+            "😂 Send funny pics to make puku laugh",
+            "🍳 Cook for Puku when you're at her place",
+            "🙏 Say sorry for whatever happens in the next one hour",
+            "🎬 Take her on a movie date next week",
+            "🌄 Take her on some fun adventure",
+            "❤️ Say you lover her and cuddle up baby girl",
+            "🔥 Make her moan your name until she marks her territory on you"
+        ];
+        const images = [
+            "images/SequenceGame/IMG_20241002_232345.jpg",
+            "images/SequenceGame/8BD87B74-8BDE-4CF2-9FBF-1171A2ED51A5.jpeg",
+            "images/SequenceGame/IMG-20241220-WA0139.jpg",
+            "images/SequenceGame/IMG_20241207_181803.jpg",
+            "images/SequenceGame/IMG-20241225-WA0127.jpg",
+            "images/SequenceGame/Snapchat-2127376322.jpg",
+            "images/SequenceGame/Snapchat-1729979077.jpg",
+            "images/SequenceGame/Snapchat-1743923237.jpg",
+            "images/SequenceGame/Snapchat-576221581.jpg"
+        ];
+
+        let quizIndex = 0, quizScore = 0;
+        let seqCorrectOrder = [...images];
+        let seqArranged = [];
+        let quizWon = false, seqWon = false;
+
+        function goMenu() {
+            document.querySelectorAll('.quiz, .sequence-game, .final-screen').forEach(e => e.classList.remove('active'));
+            document.querySelector('.menu').classList.add('active');
+        }
+        function startQuiz() {
+            quizIndex = 0; quizScore = 0;
+            document.querySelector('.menu').classList.remove('active');
+            document.querySelector('.quiz').classList.add('active');
+            showQuiz();
+        }
+        function showQuiz() {
+            const q = quizData[quizIndex];
+            let html = `<div class="quiz-question"><h3>${q.question}</h3>`;
+            q.answers.forEach(ans => {
+                html += `<div class="quiz-option" onclick="selectAnswer('${ans}')">${ans}</div>`;
+            });
+            html += `</div>`;
+            document.getElementById('quiz-container').innerHTML = html;
+        }
+        function selectAnswer(ans) {
+            quizScore++;
+            quizIndex++;
+            if (quizIndex < quizData.length) {
+                showQuiz();
+            } else {
+                quizWon = true;
+                showReward();
+            }
+        }
+        function startSequence() {
+            seqArranged = [];
+            const pool = document.getElementById('image-pool');
+            pool.innerHTML = '';
+            document.getElementById('sequence-area').innerHTML = '';
+            document.querySelector('.menu').classList.remove('active');
+            document.querySelector('.sequence-game').classList.add('active');
+            [...images].sort(() => Math.random() - 0.5).forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.draggable = true;
+                img.addEventListener('dragstart', dragStart);
+                img.addEventListener('contextmenu', e => {
+                    e.preventDefault();
+                    if (seqArranged.includes(src)) {
+                        seqArranged = seqArranged.filter(i => i !== src);
+                        renderSequence();
+                    }
+                });
+                pool.appendChild(img);
+            });
+        }
+        function dragStart(e) {
+            e.dataTransfer.setData("src", e.target.src);
+        }
+        document.getElementById('sequence-area').addEventListener('dragover', e => e.preventDefault());
+        document.getElementById('sequence-area').addEventListener('drop', e => {
+            e.preventDefault();
+            const src = e.dataTransfer.getData("src");
+            if (!seqArranged.includes(src)) {
+                seqArranged.push(src);
+                renderSequence();
+            }
+        });
+        function renderSequence() {
+            const area = document.getElementById('sequence-area');
+            area.innerHTML = '';
+            seqArranged.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.addEventListener('contextmenu', e => {
+                    e.preventDefault();
+                    seqArranged = seqArranged.filter(i => i !== src);
+                    renderSequence();
+                });
+                area.appendChild(img);
+            });
+        }
+        function checkSequence() {
+            if (JSON.stringify(seqArranged) === JSON.stringify(seqCorrectOrder)) {
+                seqWon = true;
+                showReward();
+            } else {
+                alert("Try again, baby girl 💕");
+            }
+        }
+        function showReward() {
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('overlay-text').innerText = "Whatever Puku says... she is always right 💖 You Win!!";
+            setTimeout(() => {
+                const reward = rewards[Math.floor(Math.random() * rewards.length)];
+                document.getElementById('reward-text').innerText = reward;
+            }, 3000);
+            if (quizWon && seqWon) {
+                setTimeout(showFinal, 5000);
+            }
+        }
+        function closeOverlay() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+        function showFinal() {
+            document.querySelectorAll('.menu, .quiz, .sequence-game').forEach(e => e.classList.remove('active'));
+            document.querySelector('.final-screen').classList.add('active');
+        }
+        function createHearts() {
+            const hearts = document.getElementById('hearts');
+            setInterval(() => {
+                const h = document.createElement('div');
+                h.classList.add('heart');
+                h.style.left = Math.random() * 100 + "%";
+                h.style.background = `hsl(${Math.random() * 360},70%,80%)`;
+                hearts.appendChild(h);
+                setTimeout(() => hearts.removeChild(h), 6000);
+            }, 500);
+        }
+        createHearts();
+    </script>
+</body>
+
+</html>
