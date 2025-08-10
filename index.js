@@ -355,15 +355,47 @@ You're my heart, my joy, my light.
 Whatever comes, we'll always be,
 Forever, just you and me. ❤️`,
 
-    `You are the sun that warms my soul,
-The missing piece that makes me whole.
-Through every laugh, through every tear,
-My love for you grows every year.`,
+    `hey i know it's not our day,
+i know you aren't okay,
+I never knew you were so strong,
+one who used to cry when shit went wrong,
 
-    `When you speak, the world stands still,
-When you smile, my heart can’t help but fill.
-If love’s a song, you are the tune,
-Forever my Puku, my sun, my moon. 🌙❤️`
+You are working so hard,
+in front of you i feel like a complete retard,
+you know everything don't you,
+things that can only be boasted by few,
+
+Stay strong brave girl i won't complain,
+but don't shy to cry,
+hug me and let go all the pain,
+probably you have cried enough that yours tears went dry,
+
+but baby girl you aint shy,
+i hope for the best and you know why,
+I really love you don't I,
+let me be you eyes while you cry ❤️
+`,
+
+    `You're confusing,
+quite amusing,
+Everytime i feel I'm a step closer,
+you always knock me over,
+
+You're like mars,
+I'm the Mars rover,
+you're a sky full of star's,
+So drunk on u, just can't get sober,
+
+I know It sounds ridiculous,
+so let me ask u to comeover,
+to somewhere it's broken, 
+but with a lot of leftover,
+
+Do i sound viscous,
+It's something i want u to watch over,
+it's a bucket full of love,
+which i want to spill over
+ 🌙❤️`
 ];
 
 function showPoem() {
